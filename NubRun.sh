@@ -5,7 +5,7 @@
 # Date: Oct. 12, 2024
 # Contact: hwac121@ptorbox.onion
 
-# GitHub: https://github.com/hwac121/NubRun.git
+# GitHub: https://github.com/hwac121/NubBuildRun.git
 
 #-----------------------------------------------------------------
 
