@@ -20,10 +20,9 @@
 #=======================================================================
 
 splash(){
-	figlet "Nubuilder" | lolcat
-	figlet "Run Script" | lolcat
+	echo -e "\e[33mNubRun\e[0m"
 	echo -e "\e[32mVersion 1.0 for Parrot Home, Parrot Security OS, and Kali Linux\e[0m"
-	echo -e "\e[32mVisit my youtube channel Majik Cat Security\e[0m"
+	echo -e "\e[32mby Majik Cat Security\e[0m"
 }
 
 #==================================
@@ -40,36 +39,29 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-#=================================
-#          RUN SCRIPT            #
-#=================================
+#==================================
+#         SETUP SCRIPT            #
+#==================================
 
-echo "Checking Sql Server..." | lolcat
-sleep 3
-sqlstat=$(systemctl status mariadb)
-if [[ $sqlstat == *"active (running)"* ]]; then
-    echo "Mariadb is running" | lolcat
-else
-    systemctl start mariadb
-    sleep 8
-fi
-echo "Checking Apache Server..." | lolcat
-sleep 3
-servstat=$(systemctl status apache2)
-if [[ $servstat == *"active (running)"* ]]; then
-	echo "Apache2 is running" | lolcat
-else 
-	systemctl start apache2
-	sleep 8
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' figlet | grep "install ok installed")
+echo Checking for figlet: $PKG_OK
+if [ "" == "$PKG_OK" ]; then
+  echo -e "\e[35mfiglet not installed. Attempting to install figlet now...\e[0m"
+  sleep 0.15
+  apt install figlet
 fi
 
-if [[ $servstat && $sqlstat == *"active (running)"* ]]; then
-	echo "Opening Nubuilder in default browser" | lolcat
-	sleep 3
-	xdg-open http://localhost/nubuilder
-else
-	echo "There is a problem with either the Apache Server or the SQL Server!" | lolcat
-	sleep 3
-	echo "Stopping Script..." | lolcat
-	sleep 3
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' lolcat | grep "install ok installed")
+echo Checking for lolcat: $PKG_OK
+if [ "" == "$PKG_OK" ]; then
+  echo -e "\e[35mlolcat not installed. Attempting to install lolcat now...\e[0m"
+  sleep 0.15
+  nala install lolcat
+  gem install lolcat
 fi
+
+rm /usr/bin/nubrun
+cp NubRun.sh /usr/bin/nubrun
+chmod +x /usr/bin/nubrun
+echo "Nubuilder Run Script is setup"
+sleep 5
